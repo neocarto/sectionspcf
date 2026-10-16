@@ -123,7 +123,7 @@ map.on("load", async () => {
   let lieux;
 
   try {
-    lieux = await csv("data/pcf.csv");
+    lieux = await csv(`${import.meta.env.BASE_URL}data/pcf.csv`);
 
     // Ne conserver que les sections et les fédérations
     lieux = lieux.filter((d) =>

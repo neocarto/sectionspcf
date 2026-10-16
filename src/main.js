@@ -8,8 +8,7 @@ import { csv } from "d3-fetch";
 
 // Title
 const title = document.getElementById("title");
-title.textContent =
-  "Cartographie (partielle et non officielle) des sections et fédérations du PCF";
+title.textContent = "Sections et fédérations PCF";
 function fitText() {
   const parentWidth = title.clientWidth;
   let fontSize = 30;

@@ -1,0 +1,78 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+}
+
+.maplibregl-popup-close-button {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+}
+
+#title {
+  color: #536174;
+  font-family: "Inter", "Arial", sans-serif;
+  font-size: 19px;
+  font-weight: 500;
+  letter-spacing: -0.2px;
+
+  user-select: none;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  height: 55px;
+  line-height: 55px;
+  background: rgba(255, 255, 255, 0.88);
+  border: none;
+  border-left: 15px solid rgba(180, 35, 50, 0.65);
+  padding: 0 14px;
+  border-radius: 2px;
+  cursor: pointer;
+  z-index: 1010;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+#credit {
+  position: absolute;
+  width: 140px;
+  padding: 10px;
+  left: 0px;
+  z-index: 1;
+  bottom: 0px;
+  left: 40px;
+}
+
+#contribute {
+  user-select: none;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  max-width: 100vw;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1010;
+  line-height: 0;
+}
+
+.maplibregl-ctrl-attrib {
+  max-width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
+  font-size: 11px;
+}
+
+.maplibregl-ctrl-top-right {
+  transform: translateY(15px);
+}

@@ -1,0 +1,5 @@
+node_modules
+dist/
+input/
+.nyc_output
+.Rproj.user

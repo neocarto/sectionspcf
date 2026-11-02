@@ -1,0 +1,18 @@
+fuzzy <- function(dep) {
+  file <- paste0("../public/data/raw/", dep)
+  df <- read.csv(file)
+
+  set.seed(123)
+  df$latitude <- round(jitter(df$latitude, amount = 0.01), 2)
+  df$longitude <- round(jitter(df$longitude, amount = 0.01), 2)
+
+  write.csv(df, paste0("../public/data/", dep), row.names = FALSE)
+}
+
+files <- list.files(
+  "../public/data/raw",
+  pattern = "\\.csv$",
+  full.names = FALSE
+)
+
+lapply(files, fuzzy)

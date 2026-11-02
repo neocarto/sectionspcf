@@ -3,8 +3,8 @@ fuzzy <- function(dep) {
   df <- read.csv(file)
 
   set.seed(123)
-  df$latitude <- round(jitter(df$latitude, amount = 0.01), 2)
-  df$longitude <- round(jitter(df$longitude, amount = 0.01), 2)
+  df$latitude <- round(jitter(df$latitude, amount = 0.01), 0.002)
+  df$longitude <- round(jitter(df$longitude, amount = 0.01), 0.002)
 
   write.csv(df, paste0("../public/data/", dep), row.names = FALSE)
 }

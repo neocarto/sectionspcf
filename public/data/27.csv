@@ -1,12 +1,12 @@
-"nom","latitude","longitude","email"
-"Andelle",49.46,1.4,""
-"Avre et Iton",48.75,0.93,""
-"Évreux",49.02,1.15,""
-"Gisors",49.29,1.77,""
-"Gisors - Étrépagny",49.29,1.78,"pcfgisors@orange.fr"
-"Louviers-Gaillon",49.15,1.34,""
-"Pont-Audemer",49.35,0.52,""
-"Pont de l'Arche-Val de Reuil",49.31,1.15,""
-"Risle-Charentonne",48.96,0.52,""
-"Roumois",49.36,0.77,""
-"Vernon / Pacy",49.1,1.49,""
+nom,latitude,longitude,email
+Andelle,49.359886066536,1.35524662754883,
+Avre et Iton,48.7402797466184,0.92934492699487,
+Évreux,49.0262497842332,1.15337165266368,
+Gisors,49.2788446771389,1.77584785690659,
+Gisors - Étrépagny,49.2780615154113,1.77661269765755,pcfgisors@orange.fr
+Louviers-Gaillon,49.161313836654,1.34140829528938,
+Pont-Audemer,49.349317463907,0.524659603108524,
+Pont de l'Arche-Val de Reuil,49.3039728116629,1.15755389480471,
+Risle-Charentonne,48.9605881044423,0.513181510830502,
+Roumois,49.3607894966114,0.763061436925405,
+Vernon / Pacy,49.092168846273,1.48574263919042,

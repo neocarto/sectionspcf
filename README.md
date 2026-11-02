@@ -11,3 +11,8 @@ Ce projet non officiel recense les sections et les fédérations du Parti commun
 ## Comment contribuer ?
 
 Pour ajouter une information ou signaler une erreur, vous pouvez mettre une issue sur Github ou utiliser ce formulaire : https://framaforms.org/la-carte-du-pcf-1792163113
+
+Les infobulles transmettent au formulaire les paramètres `structure` et `departement`. Pour que le préremplissage soit actif, ces deux valeurs doivent être utilisées comme valeurs par défaut de champs du formulaire Framaforms :
+
+- `[current-page:query:structure]` pour le nom de la structure ;
+- `[current-page:query:departement]` pour le numéro du département.

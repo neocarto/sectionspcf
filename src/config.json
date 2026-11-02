@@ -11,7 +11,7 @@
   { "id": "05", "file": "05.csv", "name": "Hautes-Alpes", "complete": true },
   { "id": "06", "file": "06.csv", "name": "Alpes-Maritimes", "complete": true },
   { "id": "07", "file": "07.csv", "name": "Ardèche", "complete": true },
-  { "id": "08", "file": "08.csv", "name": "Ardènes", "complete": true },
+  { "id": "08", "file": "08.csv", "name": "Ardennes", "complete": true },
   { "id": "09", "file": "09.csv", "name": "Ariège", "complete": true },
   { "id": "10", "file": "10.csv", "name": "Aube", "complete": true },
   { "id": "11", "file": "11.csv", "name": "Aude", "complete": true },

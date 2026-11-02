@@ -28,10 +28,32 @@ fitText();
 window.addEventListener("resize", fitText);
 
 // Contribute
+const URL_FORMULAIRE_CONTRIBUTION =
+  "https://framaforms.org/la-carte-du-pcf-1792163113";
+
+// Le formulaire peut préremplir ces champs s'ils sont configurés côté Framaforms
+// avec les valeurs par défaut [current-page:query:structure] et
+// [current-page:query:departement].
+function creerUrlContribution(lieu) {
+  const url = new URL(URL_FORMULAIRE_CONTRIBUTION);
+  const nom = String(lieu.nom ?? "").trim();
+  const departement = String(lieu.dep ?? "").trim();
+
+  if (nom) {
+    url.searchParams.set("structure", nom);
+  }
+
+  if (departement) {
+    url.searchParams.set("departement", departement);
+  }
+
+  return url.toString();
+}
+
 const contribute = document.getElementById("contribute");
 const link = document.createElement("a");
 
-link.href = "https://framaforms.org/la-carte-du-pcf-1792163113";
+link.href = URL_FORMULAIRE_CONTRIBUTION;
 link.target = "_blank";
 link.rel = "noopener noreferrer";
 
@@ -67,11 +89,13 @@ adherez.appendChild(link2);
 
 const menu = document.getElementById("menu");
 
-// Case Sections
+// Choix Sections / Fédérations (exclusif)
 const labelSections = document.createElement("label");
 const filterSections = document.createElement("input");
 
-filterSections.type = "checkbox";
+filterSections.type = "radio";
+filterSections.name = "type-structure";
+filterSections.value = "sections";
 filterSections.checked = true;
 
 labelSections.appendChild(filterSections);
@@ -81,7 +105,9 @@ labelSections.append(" Sections");
 const labelFederations = document.createElement("label");
 const filterFederations = document.createElement("input");
 
-filterFederations.type = "checkbox";
+filterFederations.type = "radio";
+filterFederations.name = "type-structure";
+filterFederations.value = "federations";
 filterFederations.checked = false;
 
 labelFederations.appendChild(filterFederations);
@@ -94,13 +120,18 @@ menu.append(labelSections, labelFederations);
 // MAP
 // -------
 
+const VUE_INITIALE = {
+  center: [2.58, 46.7],
+  zoom: 6,
+};
+
 const map = new maplibregl.Map({
   container: "map",
   attributionControl: false,
   style:
     "https://data.geopf.fr/annexes/ressources/vectorTiles/styles/PLAN.IGN/epure.json",
-  center: [2.58, 46.7],
-  zoom: 6,
+  center: VUE_INITIALE.center,
+  zoom: VUE_INITIALE.zoom,
   minZoom: 5,
   maxZoom: 12,
 });
@@ -117,12 +148,114 @@ map.on("style.load", () => {
       lid.includes("routier") ||
       lid.includes("autoroute") ||
       lid.includes("nationale") ||
-      lid.includes("toponyme")
+      lid.includes("toponyme") ||
+      lid.includes("ferre")
     ) {
       map.setLayoutProperty(id, "visibility", "none");
     }
   });
 });
+
+// -------
+// CONTOUR DU DEPARTEMENT
+// -------
+
+const SOURCE_ADMIN_EXPRESS = "admin-express";
+const COUCHE_CONTOUR_DEPARTEMENT = "departement-actif-contour";
+
+const COUCHES_LIMITES_ADMIN = [
+  "limite admin - limite de département bandeau",
+  "limite admin - limite de département tiret",
+  "limite admin - limite de région bandeau",
+  "limite admin - limite de région tiret",
+  "limite etat 1",
+  "limite etat 2",
+  "limite etat conteste",
+];
+
+let visibilitesLimitesAdmin = new Map();
+
+function initialiserContourDepartement() {
+  if (map.getSource(SOURCE_ADMIN_EXPRESS)) {
+    return;
+  }
+
+  map.addSource(SOURCE_ADMIN_EXPRESS, {
+    type: "vector",
+    url: "https://data.geopf.fr/tms/1.0.0/ADMIN_EXPRESS/metadata.json",
+  });
+
+  map.addLayer({
+    id: COUCHE_CONTOUR_DEPARTEMENT,
+    type: "line",
+    source: SOURCE_ADMIN_EXPRESS,
+    "source-layer": "departement",
+    layout: {
+      visibility: "none",
+      "line-join": "round",
+      "line-cap": "round",
+    },
+    filter: ["==", ["get", "code_insee"], ""],
+    paint: {
+      "line-color": "#9ca3af",
+      "line-width": [
+        "interpolate",
+        ["linear"],
+        ["zoom"],
+        5,
+        1.5,
+        8,
+        2.5,
+        12,
+        4,
+      ],
+      "line-opacity": 0.95,
+    },
+  });
+
+  // Mémoriser l'état initial des limites administratives du fond de carte
+  visibilitesLimitesAdmin = new Map(
+    COUCHES_LIMITES_ADMIN.filter((id) => map.getLayer(id)).map((id) => [
+      id,
+      map.getLayoutProperty(id, "visibility") ?? "visible",
+    ]),
+  );
+
+  if (departementActif) {
+    afficherContourDepartement(departementActif);
+  }
+}
+
+function afficherContourDepartement(code) {
+  if (!map.getLayer(COUCHE_CONTOUR_DEPARTEMENT)) {
+    return;
+  }
+
+  map.setFilter(COUCHE_CONTOUR_DEPARTEMENT, [
+    "==",
+    ["get", "code_insee"],
+    code ?? "",
+  ]);
+
+  map.setLayoutProperty(
+    COUCHE_CONTOUR_DEPARTEMENT,
+    "visibility",
+    code ? "visible" : "none",
+  );
+
+  // Masquer les autres limites administratives du fond de carte
+  COUCHES_LIMITES_ADMIN.forEach((id) => {
+    if (!map.getLayer(id)) {
+      return;
+    }
+
+    map.setLayoutProperty(
+      id,
+      "visibility",
+      code ? "none" : (visibilitesLimitesAdmin.get(id) ?? "visible"),
+    );
+  });
+}
 
 // -------
 // CONTROLES
@@ -133,11 +266,124 @@ const nav = new maplibregl.NavigationControl();
 map.addControl(nav, "top-right");
 nav._container.style.marginTop = "60px";
 
+// Flyto vers un département
+let departementsPromise = null;
+let departementActif = null;
+let rafraichirMarqueurs = () => {};
+
+function chargerDepartements() {
+  if (!departementsPromise) {
+    departementsPromise = json("data/departement.geojson");
+  }
+
+  return departementsPromise;
+}
+
+function etendreBounds(bounds, coordinates) {
+  if (typeof coordinates[0] === "number") {
+    bounds.extend(coordinates);
+  } else {
+    coordinates.forEach((coord) => etendreBounds(bounds, coord));
+  }
+}
+
+function revenirVueGlobale() {
+  departementActif = null;
+  afficherContourDepartement(null);
+  rafraichirMarqueurs();
+
+  map.flyTo({
+    center: VUE_INITIALE.center,
+    zoom: VUE_INITIALE.zoom,
+    duration: 1400,
+  });
+}
+
+async function zoomerSurDepartement(select) {
+  const id = select.value;
+
+  if (!id) {
+    revenirVueGlobale();
+    return;
+  }
+
+  try {
+    const departementsGeoJSON = await chargerDepartements();
+
+    const feature = departementsGeoJSON.features.find(
+      (d) => d.properties.DEP === id,
+    );
+
+    if (!feature) {
+      console.warn(`Département ${id} introuvable dans le GeoJSON`);
+      return;
+    }
+
+    departementActif = id;
+    afficherContourDepartement(id);
+    rafraichirMarqueurs();
+
+    const bounds = new maplibregl.LngLatBounds();
+    etendreBounds(bounds, feature.geometry.coordinates);
+
+    map.fitBounds(bounds, {
+      padding: { top: 90, bottom: 50, left: 50, right: 50 },
+      maxZoom: 10,
+      duration: 1400,
+    });
+  } catch (error) {
+    console.error("Erreur lors du chargement des départements :", error);
+  }
+}
+
+class FlyToDepartementControl {
+  onAdd() {
+    const container = document.createElement("div");
+    container.className = "maplibregl-ctrl maplibregl-ctrl-group";
+    container.id = "flyto-ctrl";
+
+    const select = document.createElement("select");
+    select.id = "flyto-departement";
+    select.setAttribute(
+      "aria-label",
+      "Choisir un département ou revenir à la vue globale",
+    );
+    select.title = "Choisir un département ou revenir à la vue globale";
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "France entière";
+    select.appendChild(placeholder);
+
+    config
+      .filter((d) => d.complete)
+      .forEach((d) => {
+        const option = document.createElement("option");
+        option.value = d.id;
+        option.textContent = `${d.name} (${d.id})`;
+        select.appendChild(option);
+      });
+
+    select.addEventListener("change", () => zoomerSurDepartement(select));
+
+    container.appendChild(select);
+    this._container = container;
+
+    return container;
+  }
+
+  onRemove() {
+    this._container.remove();
+  }
+}
+
+map.addControl(new FlyToDepartementControl(), "top-right");
+
 // Attribution
 const attribution = new maplibregl.AttributionControl({
   compact: true,
   customAttribution:
-    "<b>Cartographie (partielle et non officielle)<br/>des sections et fédérations du PCF</b><hr/><i>Carte réalisée par Nicolas Lambert (section Brie Sénart)<br/>avec MapLibre GL et les données du PCF. Fond de carte : © IGN</i>",
+    "<b>Cartographie (partielle et non officielle)<br/>des sections et fédérations du PCF</b><hr/><i>Carte réalisée par la section PCF Brie Sénart<br/>avec MapLibre GL et les données du PCF. Fond de carte : © IGN</i>",
 });
 
 map.addControl(attribution, "bottom-right");
@@ -155,52 +401,12 @@ map.once("idle", () => {
 // DATA
 // -------
 
+map.on("load", () => {
+  initialiserContourDepartement();
+});
+
 map.on("load", async () => {
   const lieux = await fetch_data();
-
-  // try {
-  //   const departementsGeoJSON = await json("data/departement.geojson");
-
-  //   const sel = config.filter((d) => d.complete).map((d) => d.id);
-
-  //   const features = departementsGeoJSON.features.filter((d) =>
-  //     sel.includes(d.properties.DEP),
-  //   );
-
-  //   const selection = {
-  //     type: "FeatureCollection",
-  //     features,
-  //   };
-
-  //   map.addSource("departements-pcf", {
-  //     type: "geojson",
-  //     data: selection,
-  //   });
-
-  //   const couches = map.getStyle().layers;
-
-  //   const premiereCoucheRoutiere = couches.find(({ id }) =>
-  //     id.toLowerCase().includes("routier"),
-  //   );
-
-  //   map.addLayer(
-  //     {
-  //       id: "departements-pcf-fill",
-  //       type: "fill",
-  //       source: "departements-pcf",
-  //       minzoom: 0,
-  //       maxzoom: 7,
-  //       paint: {
-  //         "fill-color": "red",
-  //         "fill-opacity": 0.3,
-  //         "fill-outline-color": "rgba(0, 0, 0, 0)",
-  //       },
-  //     },
-  //     premiereCoucheRoutiere?.id,
-  //   );
-  // } catch (error) {
-  //   console.error("Erreur lors du chargement des départements :", error);
-  // }
 
   // -------
   // MARKS
@@ -245,6 +451,7 @@ map.on("load", async () => {
 
     el.src = "images/section.svg";
     el.alt = lieu.nom || (estFederation ? "Fédération" : "Section");
+    el.classList.add("pin");
 
     el.style.width = "30px";
     el.style.height = "30px";
@@ -255,8 +462,14 @@ map.on("load", async () => {
     const lignes = champs
       .filter(({ key }) => lieu[key]?.trim())
       .map(({ key, label }) => `${label} : ${lieu[key]}`);
+    const numeroDepartement = String(lieu.dep ?? "").trim();
+    const urlContribution = creerUrlContribution(lieu);
     const txt_popup = `
-  <strong class="popup-nom">${lieu.nom || ""}</strong>
+  <strong class="popup-nom">${lieu.nom || ""}${
+    numeroDepartement
+      ? ` <span class="popup-dep">(${numeroDepartement})</span>`
+      : ""
+  }</strong>
 
   <div class="popup-infos">
     ${
@@ -333,6 +546,25 @@ ${
         : ""
     }
   </div>
+
+  <div class="popup-contribution">
+    <p class="popup-contribution-texte">
+      ${
+        estFederation
+          ? "Vous militez dans cette fédération ?"
+          : "Vous militez dans cette section ?"
+      }
+    </p>
+    <a
+      class="popup-contribuer"
+      href="${urlContribution}"
+      target="_blank"
+      rel="noopener noreferrer"
+      title="Corriger ou ajouter des informations sur cette structure (nouvel onglet)"
+    >
+      Corrigez ou ajoutez des infos<br/>(réseau social, site web, etc.)
+    </a>
+  </div>
 `;
 
     // Créer le marqueur
@@ -348,6 +580,7 @@ ${
       marker,
       estFederation,
       estSection,
+      dep: lieu.dep,
     });
 
     // Popup au clic
@@ -387,15 +620,25 @@ ${
     const afficherSections = filterSections.checked;
     const afficherFederations = filterFederations.checked;
 
-    markers.forEach(({ marker, estFederation, estSection }) => {
+    markers.forEach(({ marker, estFederation, estSection, dep }) => {
       const visible =
         (estSection && afficherSections) ||
         (estFederation && afficherFederations);
 
-      marker.getElement().style.display = visible ? "block" : "none";
+      const element = marker.getElement();
+      element.style.display = visible ? "block" : "none";
+
+      const horsDepartement =
+        Boolean(departementActif) && dep !== departementActif;
+
+      element.classList.toggle("pin-hors-departement", horsDepartement);
+      element.classList.toggle(
+        "pin-actif-departement",
+        Boolean(departementActif) && !horsDepartement,
+      );
     });
 
-    // Fermer le popup si son marqueur est masqué
+    // Fermer le popup si son marqueur est masqué par les filtres
     if (popupActive) {
       const positionPopup = popupActive.getLngLat();
 
@@ -421,6 +664,8 @@ ${
       }
     }
   }
+
+  rafraichirMarqueurs = filtrerMarqueurs;
 
   // Réagir aux changements des cases
   filterSections.addEventListener("change", filtrerMarqueurs);

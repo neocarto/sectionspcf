@@ -1,22 +1,22 @@
-"nom","latitude","longitude","email","website","facebook"
-"Brévenne",45.77,4.57,"","",""
-"Bron",45.74,4.91,"pcfbron@gmail.com","",""
-"Caluire",45.79,4.85,"","",""
-"Décines-Chassieu-Genas",45.77,4.96,"pcfdecines@netc.fr","",""
-"Fanjat-Falcot",45.68,4.9,"","",""
-"Givors Grigny Ozon",45.58,4.77,"","",""
-"Lyon",45.75,4.87,"lyon@rhone.pcf.fr","",""
-"Meyzieu",45.77,5,"","",""
-"Ouest Lyonnais",45.76,4.8,"","",""
-"Oullins",45.71,4.81,"","",""
-"Pierre Bénite",45.71,4.83,"","",""
-"Rillieux",45.82,4.9,"","",""
-"St Fons",45.71,4.86,"","",""
-"St Priest",45.7,4.94,"","",""
-"Thizy",46.03,4.3,"","",""
-"Universités",45.75,4.89,"","",""
-"Val-de-Saône / Neuville",45.87,4.83,"val-de-saone@rhone.pcf.fr","","PCFneuville"
-"Vaulx en Velin",45.77,4.92,"pcfvaulx@gmail.com","",""
-"Vénissieux",45.7,4.88,"","",""
-"Villefranche-Beaujolais",46,4.72,"pcfbeaujolais@orange.fr","",""
-"Villeurbanne",45.78,4.89,"villeurbanne@rhone.pcf.fr","pcf-villeurbanne.over-blog.org/",""
+nom,latitude,longitude,email,website,facebook,twitter
+Brévenne,45.7746974036657,4.57029933989235,,,,
+Bron,45.7335600035038,4.91158584410293,pcfbron@gmail.com,,,
+Caluire,45.796476085902,4.84333699871937,,,,
+Décines-Chassieu-Genas,45.7662371549795,4.96105334709557,pcfdecines@netc.fr,,,
+Fanjat-Falcot,45.6672590230448,4.89188522789595,,,,
+Givors Grigny Ozon,45.585013582062,4.76434644316494,,,,
+Lyon,45.7466135016738,4.86883457102605,lyon@rhone.pcf.fr,,,
+Meyzieu,45.7666793848878,5.00309214605855,,,,
+Ouest Lyonnais,45.7639508609116,4.81112296796753,,,,
+Oullins,45.7132589717808,4.80121336018864,,,,pcfOullins
+Pierre Bénite,45.7007887237014,4.82535822887382,,,,
+Rillieux,45.8233426023955,4.90010126989059,,,,
+St Fons,45.7082907356205,4.85373610553315,,,,
+St Priest,45.7001777711345,4.94672769747799,,,,
+Thizy,46.034824636482,4.30296423024232,,,,
+Universités,45.7428433131831,4.8815573242313,,,,
+Val-de-Saône / Neuville,45.8772360788134,4.83680195112311,val-de-saone@rhone.pcf.fr,,PCFneuville,
+Vaulx en Velin,45.7815430253292,4.92317895314688,pcfvaulx@gmail.com,,,
+Vénissieux,45.6994069276135,4.88351625731468,,,,
+Villefranche-Beaujolais,45.9891891743873,4.72779223718761,pcfbeaujolais@orange.fr,,,
+Villeurbanne,45.772090628711,4.88945188047684,villeurbanne@rhone.pcf.fr,pcf-villeurbanne.over-blog.org/,,

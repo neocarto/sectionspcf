@@ -1,39 +1,39 @@
-"nom","latitude","longitude","email","website","facebook"
-"Ablon",48.72,2.42,"","",""
-"Alfortville",48.8,2.42,"alfortville@94.pcf.fr","http://www.pcf-alfortville.fr",""
-"Arcueil",48.8,2.33,"pcfarcueil@free.fr","",""
-"Boissy Saint-Léger",48.76,2.52,"pcf.boissy@laposte.net","",""
-"Bonneuil-sur-Marne",48.78,2.48,"pcfbonneuil94380@gmail.com","",""
-"Bry-Nogent-Le Perreux",48.83,2.48,"pcf.nogent@gmail.com","",""
-"Cachan",48.79,2.33,"particommunistecachan@gmail.com","",""
-"Champigny",48.82,2.51,"pcfchampigny@wanadoo.fr","",""
-"Charenton-Saint-Maurice",48.82,2.4,"","",""
-"Chennevières-Ormesson",48.8,2.54,"","",""
-"Chevilly-Larue / Rungis",48.77,2.35,"pcf.chevilly.rungis@gmail.com","http://pcf-chevilly-larue-rungis.fr/",""
-"Choisy",48.76,2.43,"pcf.choisy@gmail.fr","",""
-"Créteil",48.79,2.45,"creteil@valdemarne.pcf.fr","",""
-"Fontenay",48.85,2.47,"section@pcf-fontenay-sb.fr","","fontenaysousbois.pcf"
-"Fresnes",48.75,2.33,"pcfresnes@gmail.com","",""
-"Gentilly",48.82,2.34,"","",""
-"Ivry",48.81,2.39,"","",""
-"Joinville",48.81,2.47,"","",""
-"La Queue-Noiseau",48.78,2.57,"","",""
-"Le Kremlin-Bicêtre",48.82,2.36,"quoideneufaukb@gmail.com","",""
-"Le Plessis",48.81,2.58,"","",""
-"L'Haÿ-les-Roses",48.78,2.34,"","",""
-"Limeil-Brévannes",48.75,2.49,"PCFLIMEILBREVANNES@ORANGE.FR","http://pcflimeilbrevannes.over-blog.com/",""
-"Maisons-Alfort",48.82,2.43,"pcfmaisonsalfort@gmail.com","","pcfmaisonsalfort"
-"Mandres-Villecresnes",48.72,2.53,"cpart@wanadoo.fr","",""
-"Orly Aéroport",48.73,2.36,"pcf.aerop.orly@sfr.fr","",""
-"Orly-Ville",48.75,2.41,"pcforlyorlyville@gmail.com","",""
-"Rungis Complexe",48.75,2.35,"pcfcomplexederungis@gmail.com","",""
-"Saint-Mandé-Vincennes",48.84,2.44,"","",""
-"Saint-Maur",48.8,2.49,"pcfsaintmaur@gmail.com","",""
-"Sucy",48.78,2.53,"","",""
-"Thiais",48.77,2.39,"","",""
-"Valenton",48.75,2.47,"","",""
-"Villejuif",48.8,2.36,"pcfvillejuif@gmail.com","www.paroles-citoyennes.fr",""
-"Villeneuve-le-Roi-Ablon",48.72,2.41,"","",""
-"Villeneuve-Saint-Georges",48.74,2.44,"section.parti-commun@wanadoo.fr","",""
-"Villiers",48.83,2.55,"pcf.villiers94@gmail.com","",""
-"Vitry",48.78,2.39,"pcfvitry94@gmail.com","http://vitry94.pcf.fr/",""
+nom,latitude,longitude,email,website,facebook,twitter
+Ablon,48.7248448133034,2.42120054019316,,,,
+Alfortville,48.7986429575951,2.42371935391331,alfortville@94.pcf.fr,http://www.pcf-alfortville.fr,,
+Arcueil,48.8048240101339,2.33475320764188,pcfarcueil@free.fr,,,
+Boissy Saint-Léger,48.7487447234188,2.52150712542969,pcf.boissy@laposte.net,,,
+Bonneuil-sur-Marne,48.7725303686649,2.48645155873803,pcfbonneuil94380@gmail.com,,,PCF_Bonneuil94
+Bry-Nogent-Le Perreux,48.8362084986246,2.48223347948704,pcf.nogent@gmail.com,,,
+Cachan,48.7927845774115,2.33289933416874,particommunistecachan@gmail.com,,,
+Champigny,48.816480073376,2.51649127430398,pcfchampigny@wanadoo.fr,,,
+Charenton-Saint-Maurice,48.8228490215954,2.40714216908414,,,,
+Chennevières-Ormesson,48.7971947969978,2.53790295211113,,,,
+Chevilly-Larue / Rungis,48.7653689937474,2.35645428173133,pcf.chevilly.rungis@gmail.com,http://pcf-chevilly-larue-rungis.fr/,,
+Choisy,48.7613111534312,2.41800629766107,pcf.choisy@gmail.fr,,,
+Créteil,48.7848335027976,2.45600894218274,creteil@valdemarne.pcf.fr,,,
+Fontenay,48.8515612391354,2.47397803668222,section@pcf-fontenay-sb.fr,,fontenaysousbois.pcf,
+Fresnes,48.7581077311765,2.32716251904047,pcfresnes@gmail.com,,,
+Gentilly,48.8131932126994,2.34511459464199,,,,
+Ivry,48.8135228292348,2.38760545331032,,,,
+Joinville,48.8206860383996,2.47290401518378,,,,
+La Queue-Noiseau,48.7828608145373,2.57904044223675,,,,
+Le Kremlin-Bicêtre,48.80891832493,2.35562322628662,quoideneufaukb@gmail.com,,,
+Le Plessis,48.8065095316318,2.57504859200038,,,,
+L'Haÿ-les-Roses,48.7771291144675,2.339431547209,,,,
+Limeil-Brévannes,48.745641350349,2.49071246336212,PCFLIMEILBREVANNES@ORANGE.FR,http://pcflimeilbrevannes.over-blog.com/,,
+Maisons-Alfort,48.8054486969877,2.43920693914445,pcfmaisonsalfort@gmail.com,,pcfmaisonsalfort,
+Mandres-Villecresnes,48.7199075337446,2.53435777982286,cpart@wanadoo.fr,,,
+Orly Aéroport,48.7300522188143,2.36681559136564,pcf.aerop.orly@sfr.fr,,,
+Orly-Ville,48.7447121640615,2.40772807415942,pcforlyorlyville@gmail.com,,,
+Rungis Complexe,48.7492129944536,2.35004491112191,pcfcomplexederungis@gmail.com,,,
+Saint-Mandé-Vincennes,48.8467890327194,2.43639228756285,,,,
+Saint-Maur,48.8019617187417,2.48884583257691,pcfsaintmaur@gmail.com,,,
+Sucy,48.7712510255861,2.52229283328992,,,,
+Thiais,48.7640211220272,2.39436460891313,,,,
+Valenton,48.7482660229573,2.46642904395224,,,,
+Villejuif,48.7928862220085,2.35953318902923,pcfvillejuif@gmail.com,www.paroles-citoyennes.fr,,
+Villeneuve-le-Roi-Ablon,48.7317936066041,2.40731064000556,,,,
+Villeneuve-Saint-Georges,48.7400988782658,2.45064336168038,section.parti-commun@wanadoo.fr,,,
+Villiers,48.8264135606493,2.54613060518922,pcf.villiers94@gmail.com,,,
+Vitry,48.7883546975652,2.39232588359123,pcfvitry94@gmail.com,http://vitry94.pcf.fr/,,

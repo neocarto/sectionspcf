@@ -594,7 +594,7 @@ map.addControl(new FlyToDepartementControl(), "top-right");
 const attribution = new maplibregl.AttributionControl({
   compact: true,
   customAttribution:
-    "<b>Cartographie (partielle et non officielle)<br/>des sections et fédérations du PCF</b><hr/><i>Carte réalisée par la section PCF Brie Sénart<br/>avec MapLibre GL et les données du PCF. Fond de carte : © IGN</i>",
+    "<b>Cartographie (non officielle)<br/>des sections et fédérations du PCF</b><hr/><i>Carte réalisée par la section PCF Brie Sénart<br/>avec MapLibre GL et les données du PCF.<br/>Fond de carte : © IGN</i>",
 });
 
 map.addControl(attribution, "bottom-right");

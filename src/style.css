@@ -212,12 +212,14 @@ body {
 /* À gauche des boutons de navigation, aligné sur leur haut */
 #flyto-ctrl {
   clear: none;
+  width: min(230px, calc(100vw - 120px));
   margin-top: 60px;
+  box-sizing: border-box;
 }
 
 #flyto-departement {
+  width: 100%;
   height: 29px;
-  max-width: min(230px, calc(100vw - 120px));
   padding: 0 8px;
 
   border: 0;
@@ -232,7 +234,99 @@ body {
 
 #flyto-departement:focus-visible {
   outline: 2px solid #c41220;
-  outline-offset: 2px;
+  outline-offset: -2px;
+}
+
+/* -------
+   RECHERCHE PAR NOM
+   ------- */
+
+.recherche-structure {
+  position: relative;
+  width: 100%;
+}
+
+#recherche-structure-input {
+  width: 100%;
+  height: 29px;
+  padding: 0 8px;
+
+  border: 0;
+  border-top: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 0 0 4px 4px;
+  background: #fff;
+  box-sizing: border-box;
+  color: #292929;
+
+  font-family: inherit;
+  font-size: 13px;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+#recherche-structure-input::placeholder {
+  color: #888;
+}
+
+#recherche-structure-input:focus-visible {
+  outline: 2px solid #c41220;
+  outline-offset: -2px;
+}
+
+.recherche-structure-liste {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  z-index: 30;
+  width: 100%;
+  max-height: 260px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+
+  background: #fff;
+  border: 1px solid rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  box-shadow: 0 4px 14px rgb(0 0 0 / 18%);
+}
+
+.recherche-structure-liste[hidden] {
+  display: none;
+}
+
+.recherche-structure-option {
+  padding: 6px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.recherche-structure-option:hover,
+.recherche-structure-option.est-active {
+  background: #f3eeee;
+}
+
+.recherche-structure-nom {
+  display: block;
+  overflow: hidden;
+  color: #292929;
+  font-size: 13px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recherche-structure-meta {
+  display: block;
+  color: #777;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.recherche-structure-vide {
+  padding: 6px 8px;
+  color: #777;
+  font-size: 12px;
 }
 
 /* Épingles hors du département actif */
@@ -242,7 +336,8 @@ body {
     filter 0.2s ease;
 }
 
-.pin-hors-departement {
+.pin-hors-departement,
+.pin-hors-selection {
   opacity: 0.3;
   filter: grayscale(1) brightness(1.15);
 }
@@ -250,6 +345,12 @@ body {
 /* Le département sélectionné passe au-dessus des épingles grisées */
 .pin-actif-departement {
   z-index: 1;
+}
+
+/* L'épingle trouvée par la recherche passe au-dessus et reste en couleur */
+.pin-selectionnee {
+  z-index: 3;
+  filter: drop-shadow(0 0 5px rgb(196 18 32 / 85%));
 }
 
 /* -----------------

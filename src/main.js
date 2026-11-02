@@ -271,6 +271,33 @@ let departementsPromise = null;
 let departementActif = null;
 let rafraichirMarqueurs = () => {};
 
+// Recherche par nom
+let departementSelect = null;
+let rechercheInputElement = null;
+let fermerListeRecherche = () => {};
+let structureSelectionnee = null;
+let rechercherStructures = () => [];
+let choisirStructure = () => {};
+let effacerSelectionStructure = () => {};
+
+function normaliserTexte(texte) {
+  return String(texte ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function reinitialiserRecherche() {
+  structureSelectionnee = null;
+
+  if (rechercheInputElement) {
+    rechercheInputElement.value = "";
+  }
+
+  fermerListeRecherche();
+}
+
 function chargerDepartements() {
   if (!departementsPromise) {
     departementsPromise = json("data/departement.geojson");
@@ -288,6 +315,7 @@ function etendreBounds(bounds, coordinates) {
 }
 
 function revenirVueGlobale() {
+  reinitialiserRecherche();
   departementActif = null;
   afficherContourDepartement(null);
   rafraichirMarqueurs();
@@ -306,6 +334,9 @@ async function zoomerSurDepartement(select) {
     revenirVueGlobale();
     return;
   }
+
+  reinitialiserRecherche();
+  rafraichirMarqueurs();
 
   try {
     const departementsGeoJSON = await chargerDepartements();
@@ -334,6 +365,182 @@ async function zoomerSurDepartement(select) {
   } catch (error) {
     console.error("Erreur lors du chargement des départements :", error);
   }
+}
+
+function creerRechercheStructure() {
+  const conteneur = document.createElement("div");
+  conteneur.id = "recherche-structure";
+  conteneur.className = "recherche-structure";
+
+  const input = document.createElement("input");
+  input.id = "recherche-structure-input";
+  input.type = "search";
+  input.placeholder = "Rechercher une section ou fédé";
+  input.autocomplete = "off";
+  input.spellcheck = false;
+  input.setAttribute("role", "combobox");
+  input.setAttribute("aria-label", "Rechercher une section ou une fédération");
+  input.setAttribute("aria-autocomplete", "list");
+  input.setAttribute("aria-haspopup", "listbox");
+  input.setAttribute("aria-expanded", "false");
+  input.setAttribute("aria-controls", "recherche-structure-liste");
+  input.title = "Rechercher une section ou une fédé";
+
+  const liste = document.createElement("ul");
+  liste.id = "recherche-structure-liste";
+  liste.className = "recherche-structure-liste";
+  liste.setAttribute("role", "listbox");
+  liste.setAttribute("aria-label", "Sections et fédérations");
+  liste.hidden = true;
+
+  let resultats = [];
+  let indexActif = -1;
+
+  const fermerListe = () => {
+    liste.hidden = true;
+    liste.replaceChildren();
+    resultats = [];
+    indexActif = -1;
+    input.setAttribute("aria-expanded", "false");
+    input.removeAttribute("aria-activedescendant");
+  };
+
+  const activerOption = (index) => {
+    const options = liste.querySelectorAll(".recherche-structure-option");
+
+    if (!options.length) {
+      return;
+    }
+
+    indexActif = (index + options.length) % options.length;
+
+    options.forEach((option, i) => {
+      const actif = i === indexActif;
+      option.classList.toggle("est-active", actif);
+      option.setAttribute("aria-selected", String(actif));
+    });
+
+    input.setAttribute("aria-activedescendant", options[indexActif].id);
+    options[indexActif].scrollIntoView({ block: "nearest" });
+  };
+
+  const selectionnerResultat = (structure) => {
+    if (!structure) {
+      return;
+    }
+
+    input.value = structure.nom;
+    fermerListe();
+    choisirStructure(structure);
+  };
+
+  const afficherListe = () => {
+    const recherche = input.value.trim();
+    resultats = recherche ? rechercherStructures(recherche) : [];
+    liste.replaceChildren();
+    indexActif = -1;
+    input.removeAttribute("aria-activedescendant");
+
+    if (!recherche) {
+      fermerListe();
+      return;
+    }
+
+    if (!resultats.length) {
+      const vide = document.createElement("li");
+      vide.className = "recherche-structure-vide";
+      vide.textContent = "Aucune structure trouvée";
+      liste.appendChild(vide);
+      liste.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+      return;
+    }
+
+    resultats.forEach((structure, index) => {
+      const option = document.createElement("li");
+      option.id = `recherche-structure-option-${index}`;
+      option.className = "recherche-structure-option";
+      option.dataset.index = String(index);
+      option.setAttribute("role", "option");
+      option.setAttribute("aria-selected", "false");
+
+      const nom = document.createElement("span");
+      nom.className = "recherche-structure-nom";
+      nom.textContent = structure.nom;
+
+      const meta = document.createElement("span");
+      meta.className = "recherche-structure-meta";
+      meta.textContent = `${structure.estFederation ? "Fédération" : "Section"} · ${structure.dep}`;
+
+      option.append(nom, meta);
+      liste.appendChild(option);
+    });
+
+    liste.hidden = false;
+    input.setAttribute("aria-expanded", "true");
+  };
+
+  input.addEventListener("input", () => {
+    effacerSelectionStructure();
+    afficherListe();
+  });
+
+  input.addEventListener("search", () => {
+    effacerSelectionStructure();
+    afficherListe();
+  });
+
+  input.addEventListener("focus", () => {
+    if (input.value.trim()) {
+      afficherListe();
+    }
+  });
+
+  input.addEventListener("blur", () => {
+    window.setTimeout(fermerListe, 160);
+  });
+
+  input.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowDown") {
+      event.preventDefault();
+      activerOption(indexActif + 1);
+    } else if (event.key === "ArrowUp") {
+      event.preventDefault();
+      activerOption(indexActif - 1);
+    } else if (event.key === "Enter") {
+      event.preventDefault();
+
+      if (resultats.length) {
+        selectionnerResultat(resultats[indexActif >= 0 ? indexActif : 0]);
+      }
+    } else if (event.key === "Escape") {
+      event.preventDefault();
+      fermerListe();
+    }
+  });
+
+  liste.addEventListener("mousedown", (event) => {
+    if (event.target.closest(".recherche-structure-option")) {
+      event.preventDefault();
+    }
+  });
+
+  liste.addEventListener("click", (event) => {
+    const option = event.target.closest(".recherche-structure-option");
+
+    if (!option) {
+      return;
+    }
+
+    selectionnerResultat(resultats[Number(option.dataset.index)]);
+  });
+
+  conteneur.append(input, liste);
+
+  rechercheInputElement = input;
+  fermerListeRecherche = fermerListe;
+
+  return conteneur;
 }
 
 class FlyToDepartementControl {
@@ -366,7 +573,8 @@ class FlyToDepartementControl {
 
     select.addEventListener("change", () => zoomerSurDepartement(select));
 
-    container.appendChild(select);
+    departementSelect = select;
+    container.append(select, creerRechercheStructure());
     this._container = container;
 
     return container;
@@ -374,6 +582,9 @@ class FlyToDepartementControl {
 
   onRemove() {
     this._container.remove();
+    departementSelect = null;
+    rechercheInputElement = null;
+    fermerListeRecherche = () => {};
   }
 }
 
@@ -581,6 +792,9 @@ ${
       estFederation,
       estSection,
       dep: lieu.dep,
+      nom: String(lieu.nom ?? "").trim(),
+      longitude,
+      latitude,
     });
 
     // Popup au clic
@@ -613,6 +827,76 @@ ${
   });
 
   // -------
+  // RECHERCHE
+  // -------
+
+  rechercherStructures = (recherche) => {
+    const terme = normaliserTexte(recherche);
+
+    if (!terme) {
+      return [];
+    }
+
+    return markers
+      .map((structure) => {
+        const nom = normaliserTexte(structure.nom);
+        const position = nom.indexOf(terme);
+
+        return { structure, nom, position };
+      })
+      .filter(({ position }) => position !== -1)
+      .sort((a, b) => {
+        const debutA = a.position === 0 ? 0 : 1;
+        const debutB = b.position === 0 ? 0 : 1;
+
+        return (
+          debutA - debutB ||
+          a.position - b.position ||
+          a.nom.localeCompare(b.nom, "fr")
+        );
+      })
+      .slice(0, 8)
+      .map(({ structure }) => structure);
+  };
+
+  choisirStructure = (structure) => {
+    if (!structure) {
+      return;
+    }
+
+    structureSelectionnee = structure.marker;
+    departementActif = null;
+
+    if (departementSelect) {
+      departementSelect.value = "";
+    }
+
+    afficherContourDepartement(null);
+
+    if (popupActive) {
+      popupActive.remove();
+      popupActive = null;
+    }
+
+    rafraichirMarqueurs();
+
+    map.flyTo({
+      center: [structure.longitude, structure.latitude],
+      zoom: 11,
+      duration: 1200,
+    });
+  };
+
+  effacerSelectionStructure = () => {
+    if (!structureSelectionnee) {
+      return;
+    }
+
+    structureSelectionnee = null;
+    rafraichirMarqueurs();
+  };
+
+  // -------
   // FILTRES
   // -------
 
@@ -621,16 +905,24 @@ ${
     const afficherFederations = filterFederations.checked;
 
     markers.forEach(({ marker, estFederation, estSection, dep }) => {
+      const rechercheActive = Boolean(structureSelectionnee);
+      const selectionne = rechercheActive && marker === structureSelectionnee;
+
       const visible =
+        rechercheActive ||
         (estSection && afficherSections) ||
         (estFederation && afficherFederations);
+
+      const horsSelection = rechercheActive && !selectionne;
+
+      const horsDepartement =
+        !selectionne && Boolean(departementActif) && dep !== departementActif;
 
       const element = marker.getElement();
       element.style.display = visible ? "block" : "none";
 
-      const horsDepartement =
-        Boolean(departementActif) && dep !== departementActif;
-
+      element.classList.toggle("pin-hors-selection", horsSelection);
+      element.classList.toggle("pin-selectionnee", selectionne);
       element.classList.toggle("pin-hors-departement", horsDepartement);
       element.classList.toggle(
         "pin-actif-departement",
@@ -647,6 +939,7 @@ ${
           const position = marker.getLngLat();
 
           const visible =
+            Boolean(structureSelectionnee) ||
             (estSection && afficherSections) ||
             (estFederation && afficherFederations);
 

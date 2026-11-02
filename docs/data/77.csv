@@ -1,20 +1,20 @@
-"nom","latitude","longitude","email","website","facebook","bluesky","instagram"
-"Mitry-Mory",48.9817726741608,2.62859507317351,"","","pcf.mitry","",""
-"Chelles",48.8774836786821,2.59053560833381,"","https://marne-et-chantereine.pcf.fr/","pcfchelles","",""
-"Lagny",48.8727482474763,2.71394647335669,"","","","",""
-"Champs",48.8501785707955,2.59943054896952,"","","coco77420","",""
-"Torcy",48.850928691207,2.65430759973971,"pcftorcy@gmail.com","https://pcfnoisiellognes.wordpress.com/","","",""
-"Meaux",48.9557136876862,2.88883862232436,"meaux.pcf@gmail.com","","pcf.meaux","",""
-"Crécy",48.85725900828,2.91262773491266,"","","","",""
-"Coulomiers",48.813010595513,3.08344263926739,"","","","",""
-"Montereau",48.3849730951325,2.95788085569056,"pcf.montereau@laposte.net","","","",""
-"Nangis",48.5568213358166,3.01497640345938,"","","","",""
-"Agglo Melun",48.5278938275186,2.65396534063377,"pcfagglomelun@wanadoo.fr","","pcf.agglomelun.1","",""
-"Brie Sénart",48.6260273157647,2.59095083735202,"section.briesenart@seineetmarne.pcf.fr","","","pcfbriesenart.bsky.social","pcfbriesenart"
-"Roissy",48.7905910365632,2.6559359115848,"","","","",""
-"Rozay",48.6836941025546,2.9589033121146,"","","","",""
-"Snecma",48.6046389278081,2.65135176525953,"","","","",""
-"Fontainebleau",48.4079416313632,2.70177999030066,"","","","",""
-"Nemours",48.2667884553934,2.69311687306565,"Pcf77.nemours@gmail.com","","","",""
-"Pontault-Combault",48.8016858039052,2.60662532050923,"","","PCFPontaultCombault","",""
-"Ozoir",48.7635689521149,2.67242568777545,"","","","",""
+nom,latitude,longitude,email,website,facebook,bluesky,instagram
+Mitry-Mory,48.9817726741608,2.62859507317351,,,pcf.mitry,,
+Chelles,48.8774836786821,2.59053560833381,,https://marne-et-chantereine.pcf.fr/,pcfchelles,,
+Lagny,48.8727482474763,2.71394647335669,,,,,
+Champs,48.8501785707955,2.59943054896952,,,coco77420,,
+Torcy,48.850928691207,2.65430759973971,pcftorcy@gmail.com,https://pcfnoisiellognes.wordpress.com/,,,
+Meaux,48.9557136876862,2.88883862232436,meaux.pcf@gmail.com,,pcf.meaux,,
+Crécy,48.85725900828,2.91262773491266,,,,,
+Coulomiers,48.813010595513,3.08344263926739,,,,,
+Montereau,48.3849730951325,2.95788085569056,pcf.montereau@laposte.net,,,,
+Nangis,48.5568213358166,3.01497640345938,,,,,pcf_nangis
+Agglo Melun,48.5278938275186,2.65396534063377,pcfagglomelun@wanadoo.fr,,pcf.agglomelun.1,,
+Brie Sénart,48.6260273157647,2.59095083735202,section.briesenart@seineetmarne.pcf.fr,,,pcfbriesenart.bsky.social,pcfbriesenart
+Roissy,48.7905910365632,2.6559359115848,,,,,
+Rozay,48.6836941025546,2.9589033121146,,,,,
+Snecma,48.6046389278081,2.65135176525953,,,,,
+Fontainebleau,48.4079416313632,2.70177999030066,,,,,
+Nemours,48.2667884553934,2.69311687306565,Pcf77.nemours@gmail.com,,,,
+Pontault-Combault,48.8016858039052,2.60662532050923,,,PCFPontaultCombault,,
+Ozoir,48.7635689521149,2.67242568777545,,,,,

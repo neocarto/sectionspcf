@@ -1,5 +1,5 @@
 nom,département,website,facebook,twitter,instagram,tiktok,youtube,latitude,longitude,adresse,email,tel
-Fédération de l’Ain,1,https://ain.pcf.fr/,,,,,,46.2009731410936,5.2280309734709,5 boulevard Victor Hugo 01005 Bourg-en-Bresse,federation@ain.pcf.fr,04 74 22 15 23
+Fédération de l’Ain,1,,,,,,,46.2009731410936,5.2280309734709,5 boulevard Victor Hugo 01005 Bourg-en-Bresse,federation@ain.pcf.fr,04 74 22 15 23
 Fédération de l’Aisne,2,,groups/pcf02,,,,,49.6613447368164,3.29844531694332,"21, rue de Vaucanson 02700 Tergnier",pcfaisne@gmail.com,03 23 52 64 67
 Fédération de l’Allier,3,,PCF-Fédération-de-lAllier-100067402250648/,,,,,46.3416866618967,2.6036948583316,10 Place de la Poterie 3100 Montluçon,federation@pcf-allier.fr,04 70 02 25 20
 Fédération des Alpes-de-Haute-Provence,4,,,,,,,44.0949333894648,6.23501348921509,26 rue Alphonse Richard  04000 Digne,federation.pcf04@orange.fr,04 92 31 01 20
@@ -13,7 +13,7 @@ Fédération de l’Aude,11,https://aude.pcf.fr/,pcfaude11,,,,,43.2118409208752,
 Fédération de l’Aveyron,12,https://aveyron.pcf.fr/,pcfaveyron12,,,,,44.2930112962025,2.5619237747327,3 rue Antarès 12450 La Primaude,pcf-dans-laveyron@wanadoo.fr,05 65 69 55 00
 Fédération des Bouches-du-Rhône,13,https://pcf13.com/,pcf13,PCF_13,pcf.bdr,pcf.13,pcf13particommunistefranca8,43.3338413775893,5.36431148702526,280 rue de Lyon 13015 Marseille,contact@pcf13.fr,04 95 05 10 10
 Fédération du Calvados,14,https://calvados.pcf.fr/,pcfcalvados,,,,,49.1739837144095,-0.356106814119727,1 Bis rue Montaigu 14000 Caen,pcfcalvados14@gmail.com,02 31 84 43 29
-Fédération du Cantal,15,https://cantal.pcf.fr/,PCFCantal,,,,,44.9079774813636,2.42576213994208,Centre Cial de Belbex 15000 Aurillac,contact@pcf-cantal.fr,04 71 64 51 68
+Fédération du Cantal,15,https://cantal.pcf.fr/,PCFCantal,,pcfcantal15,,,44.9079774813636,2.42576213994208,Centre Cial de Belbex 15000 Aurillac,contact@pcf-cantal.fr,04 71 64 51 68
 Fédération de Charente,16,https://pcfcharente.wordpress.com/,pcf16,,,,,45.6542505401326,0.160043800584408,150 rue de Paris 16000 Angoulême,federationpcf16@gmail.com,05 45 92 20 42
 Fédération de Charente-Maritime,17,,federationpcf17,,,,,46.1485468057507,-1.15612158427888,21 rue Isaac Newton 17000 La Rochelle,federation@pcf17.fr,05 46 41 20 24
 Fédération du Cher,18,https://cher.pcf.fr/,pcf18,,,,,47.0748814312489,2.3904266463884,45 rue Theophile Lamy 18000 Bourges,federation@cher.pcf.fr,02 48 50 07 61
@@ -44,7 +44,7 @@ Fédération du Loir-et-Cher,41,https://loir-et-cher.pcf.fr/,PCF-41-Fédération
 Fédération de la Loire,42,,pcfloire,pcfloire,,,,45.412599785613,4.39713141770866,51 ter rue Robespierre 42000 Saint-Étienne,pcf42000@wanadoo.fr,04 77 49 55 80
 Fédération de la Haute-Loire,43,,FederationPcfHauteLoire,,,,,45.0388019299877,3.88789920160087,52 av Maréchal Foch 43000 Le Puy-en-Velay,pcf43@orange.fr,04 71 09 22 56
 Fédération de Loire-Atlantique,44,https://pcf44.fr/,pcf44100ans,,,,,47.2103899833061,-1.54871909867581,41 rue des Olivettes 44000 Nantes,pcf44@wanadoo.fr,02 40 35 03 00
-Fédération du Loiret,45,https://loiret.pcf.fr/,PCFLoiret,PCFLoiret,,,,47.9078011849911,1.9089267309309,5 rue Marcel Proust 45000 Orléans,fedepcf45@gmail.com,02 38 77 80 50
+Fédération du Loiret,45,https://loiret.pcf.fr/,PCFLoiret,PCFLoiret,pcfloiret,,,47.9078011849911,1.9089267309309,5 rue Marcel Proust 45000 Orléans,fedepcf45@gmail.com,02 38 77 80 50
 Fédération du Lot,46,https://lot.pcf.fr/,pcflot,PCF_46,,,,44.4473003942131,1.44866790327181,29 avenue du Maquis 46000 Cahors,pcffd46@gmail.com,05 65 35 03 95
 Fédération du Lot-et-Garonne,47,https://lot-et-garonne.pcf.fr/la-federation/,PCF-Lot-et-Garonne-Le-défi-des-Jours-Heureux-100075872754360,,,,,44.3013800345519,0.33829504349455,18 Place du 14 juillet 47004 Agen,pcf.47.federation@wanadoo.fr,05 53 66 98 10
 Fédération de Lozère,48,,PCF-Lozère-100064940490691,,,,,44.5182268917875,3.49510972943674,12 Bis avenue Foch 48000 Mende,pcf.48@wanadoo.fr,04 66 49 00 89
@@ -77,7 +77,7 @@ Fédération de Haute-Savoie,74,https://www.pcf74.fr/,profile.php?id=61573447869
 Fédération de Paris,75,https://paris.pcf.fr/,PCF75,PCF_Paris,pcfparis,,,48.8767204232698,2.34108353023469,42 rue Lamartine 75009 Paris,bienvenue@paris.pcf.fr,01 44 83 85 15
 Fédération de Seine-Maritime,76,https://seine-maritime.pcf.fr/,76PCF,,,,,49.4149598823244,1.09049450246695,33 Place de l'Hôtel de Ville 76000 Rouen,pcf76@pcf76.fr,02 35 07 89 80
 Fédération de Seine-et-Marne,77,https://seine-et-marne.pcf.fr/,PCF77,,,,,48.5318416665005,2.67919024360456,"264 rue de la Justice, 77000 Vaux-le-Pénil",pcf77fd@gmail.com,01 64 79 75 10
-Fédération des Yvelines,78,https://yvelines.pcf.fr/,sectionconflansstehonorinepcf78,,pcf.78,,,48.7768042166167,2.00121865915288,3 bis avenue Carnot 78190 Trappes,pcf78@orange.fr,01 30 50 03 56
+Fédération des Yvelines,78,https://yvelines.pcf.fr/,sectionconflansstehonorinepcf78,,pcfyvelines,,,48.7768042166167,2.00121865915288,3 bis avenue Carnot 78190 Trappes,pcf78@orange.fr,01 30 50 03 56
 Fédération des Deux-Sèvres,79,https://deux-sevres.pcf.fr/,PCFDeuxSevres,,,,,46.3218185709247,-0.463835357129399,23 rue des Fossés 79007 Niort,pcf79@orange.fr,05 49 24 11 14
 Fédération de la Somme,80,,Parti-Communiste-Somme-61556793322201,,pcf_somme,,,49.9014001679552,2.28121364837293,18 rue du Fg de Hem 80000 Amiens,pcf.somme@gmail.com,03 22 69 24 40
 Fédération du Tarn,81,https://tarn.pcf.fr/90551,,pcftarn81,pcftarn81,,,43.922721437758,2.14981452867058,53 Bld Montébello 81000 Albi,fedepcf81@orange.fr,05 63 54 07 87

@@ -752,7 +752,7 @@ ${k.shaderPreludeCode.vertexSource}`,define:k.shaderDefine},defaultProjectionDat
   <div class="a-propos-corps">
     <p class="a-propos-intro">
       Projet non officiel de cartographie des sections et fédérations
-      du Parti communiste français. Ce travail est en cours d'élaborartion et les données sont susceptibles d'évoluer. Les informations publiées
+      du Parti communiste français. Ce travail est en cours d'élaborartion et les données sont en cours de vérification. N'hésitez pas à signaler toute erreur ou omission via le formulaire de contribution.
     </p>
 
     <section>

@@ -1,19 +1,19 @@
-"nom","latitude","longitude","email","website"
-"Beausoleil - Cap d'Ail - Villefranche-sur-Mer",43.7278074032759,7.41158944252795,"",""
-"Cagnes-sur-Mer",43.6629062804592,7.15193429738696,"",""
-"Cannes",43.551444163601,6.9792741889593,"",""
-"Carros",43.7733233803315,7.1904546501673,"",""
-"Cheminots Charles CARESSA",43.6645133959903,7.1476981334035,"sectionpcfcharlescaressa@gmail.com",""
-"Communauté d'Agglomération de Sophia-Antipolis",43.5821677245991,7.12189859382224,"antibes@pcf06.org","http://pcfcasa.over-blog.com/"
-"Grasse",43.6585661174745,6.92442534221953,"",""
-"Haut-Var",44.0897231373672,7.06705436032477,"",""
-"La Trinité",43.7416650740421,7.31161838631265,"",""
-"Le Cannet - Mougins",43.5784915833538,6.99791396026503,"",""
-"Levens",43.8525912654596,7.23501170995883,"",""
-"Menton",43.7752409962495,7.49333549271724,"",""
-"Nice",43.7127244513838,7.29191534143454,"pcfnice@alpesmaritimes.pcf.fr",""
-"Paillon",43.7256766707296,7.28782043811158,"",""
-"Rive Droite du Var",43.7038295304734,7.21843026166255,"",""
-"Roya",43.9849174444719,7.54719168970353,"",""
-"Vence",43.7223532520356,7.11433256315617,"",""
-"Vésubie",NA,NA,"",""
+nom,latitude,longitude,email,website,instagram
+Beausoleil - Cap d'Ail - Villefranche-sur-Mer,43.7278074032759,7.41158944252795,,,
+Cagnes-sur-Mer,43.6629062804592,7.15193429738696,,,
+Cannes,43.551444163601,6.9792741889593,,,
+Carros,43.7733233803315,7.1904546501673,,,
+Cheminots Charles CARESSA,43.6645133959903,7.1476981334035,sectionpcfcharlescaressa@gmail.com,,
+Communauté d'Agglomération de Sophia-Antipolis,43.5821677245991,7.12189859382224,antibes@pcf06.org,http://pcfcasa.over-blog.com/,
+Grasse,43.6585661174745,6.92442534221953,,,
+Haut-Var,44.0897231373672,7.06705436032477,,,
+La Trinité,43.7416650740421,7.31161838631265,,,
+Le Cannet - Mougins,43.5784915833538,6.99791396026503,,,
+Levens,43.8525912654596,7.23501170995883,,,
+Menton,43.7752409962495,7.49333549271724,,,pcf.mentonaujourdhuietdemain
+Nice,43.7127244513838,7.29191534143454,pcfnice@alpesmaritimes.pcf.fr,,
+Paillon,43.7256766707296,7.28782043811158,,,
+Rive Droite du Var,43.7038295304734,7.21843026166255,,,
+Roya,43.9849174444719,7.54719168970353,,,
+Vence,43.7223532520356,7.11433256315617,,,pcfvence06
+Vésubie,NA,NA,,,

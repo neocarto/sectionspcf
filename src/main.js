@@ -10,17 +10,34 @@ import config from "./config.json";
 
 // Title
 const title = document.getElementById("title");
-title.textContent = "Sections et fédérations PCF";
+const titreTexte = document.createElement("span");
+titreTexte.className = "titre-texte";
+titreTexte.textContent = "Les sections du PCF";
+
+const titreBadge = document.createElement("span");
+titreBadge.className = "titre-badge";
+titreBadge.textContent = "En construction";
+titreBadge.title =
+  "Carte en construction : les données sont en cours de vérification.";
+
+title.replaceChildren(titreTexte, titreBadge);
 
 function fitText() {
-  const parentWidth = title.clientWidth;
+  const style = window.getComputedStyle(title);
+  const paddingX =
+    Number.parseFloat(style.paddingLeft) +
+    Number.parseFloat(style.paddingRight);
+  const gap = Number.parseFloat(style.gap) || 0;
+  const largeurDisponible =
+    title.clientWidth - paddingX - titreBadge.offsetWidth - gap;
+
   let fontSize = 30;
 
-  title.style.fontSize = fontSize + "px";
+  titreTexte.style.fontSize = fontSize + "px";
 
-  while (title.scrollWidth > parentWidth && fontSize > 8) {
+  while (titreTexte.scrollWidth + 2 > largeurDisponible && fontSize > 8) {
     fontSize -= 1;
-    title.style.fontSize = fontSize + "px";
+    titreTexte.style.fontSize = fontSize + "px";
   }
 }
 
@@ -113,8 +130,130 @@ filterFederations.checked = false;
 labelFederations.appendChild(filterFederations);
 labelFederations.append(" Fédérations");
 
+// Regrouper les deux choix sur une même ligne
+const choixType = document.createElement("div");
+choixType.className = "menu-choix-type";
+choixType.append(labelSections, labelFederations);
+
 // Ajouter les éléments au menu
-menu.append(labelSections, labelFederations);
+menu.append(choixType);
+
+// En-tête du menu sur mobile, avec bouton de fermeture
+const enteteMenuMobile = document.createElement("div");
+enteteMenuMobile.className = "menu-entete-mobile";
+
+const titreMenuMobile = document.createElement("span");
+titreMenuMobile.className = "menu-entete-mobile-titre";
+titreMenuMobile.textContent = "Filtres et recherche";
+
+const boutonFermerMenu = document.createElement("button");
+boutonFermerMenu.type = "button";
+boutonFermerMenu.id = "menu-fermer";
+boutonFermerMenu.className = "menu-fermer";
+boutonFermerMenu.textContent = "×";
+boutonFermerMenu.setAttribute("aria-label", "Fermer le menu");
+
+enteteMenuMobile.append(titreMenuMobile, boutonFermerMenu);
+menu.prepend(enteteMenuMobile);
+
+// Bouton d'ouverture du menu sur mobile
+const boutonMenuMobile = document.createElement("button");
+boutonMenuMobile.type = "button";
+boutonMenuMobile.id = "menu-toggle";
+boutonMenuMobile.className = "menu-toggle";
+boutonMenuMobile.setAttribute("aria-controls", "menu");
+boutonMenuMobile.setAttribute("aria-expanded", "false");
+boutonMenuMobile.innerHTML = `
+  <svg class="menu-toggle-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M4 6h16M4 12h16M4 18h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+  </svg>
+  <span>Filtres et recherche</span>
+`;
+document.body.append(boutonMenuMobile);
+
+const mediaMobile = window.matchMedia(
+  "(max-width: 640px), (max-height: 480px)",
+);
+
+function ouvrirMenuMobile() {
+  menu.classList.add("est-ouvert");
+  boutonMenuMobile.hidden = true;
+  boutonMenuMobile.setAttribute("aria-expanded", "true");
+  boutonFermerMenu.focus();
+}
+
+function fermerMenuMobile(rendreFocus = false) {
+  const etaitOuvert = menu.classList.contains("est-ouvert");
+
+  menu.classList.remove("est-ouvert");
+  boutonMenuMobile.hidden = false;
+  boutonMenuMobile.setAttribute("aria-expanded", "false");
+  fermerListeRecherche();
+
+  if (rendreFocus && etaitOuvert) {
+    boutonMenuMobile.focus();
+  }
+}
+
+boutonMenuMobile.addEventListener("click", ouvrirMenuMobile);
+boutonFermerMenu.addEventListener("click", () => fermerMenuMobile(true));
+
+document.addEventListener("pointerdown", (event) => {
+  if (!menu.classList.contains("est-ouvert")) {
+    return;
+  }
+
+  if (menu.contains(event.target)) {
+    return;
+  }
+
+  fermerMenuMobile();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && menu.classList.contains("est-ouvert")) {
+    fermerMenuMobile(true);
+  }
+});
+
+mediaMobile.addEventListener("change", (event) => {
+  if (event.matches) {
+    return;
+  }
+
+  menu.classList.remove("est-ouvert");
+  boutonMenuMobile.hidden = false;
+  boutonMenuMobile.setAttribute("aria-expanded", "false");
+});
+
+// Type de structure actuellement affiché (les deux cases sont exclusives)
+function typeStructureActif() {
+  return filterFederations.checked ? "federation" : "section";
+}
+
+const LIBELLES_STRUCTURE = {
+  section: {
+    titre: "Les sections du PCF",
+    placeholder: "Rechercher une section",
+    liste: "Sections",
+    vide: "Aucune section trouvée",
+    proche: "Section la plus proche",
+  },
+  federation: {
+    titre: "Les fédérations du PCF",
+    placeholder: "Rechercher une fédération",
+    liste: "Fédérations",
+    vide: "Aucune fédération trouvée",
+    proche: "Fédération la plus proche",
+  },
+};
+
+function mettreAJourTitre() {
+  titreTexte.textContent = LIBELLES_STRUCTURE[typeStructureActif()].titre;
+  fitText();
+}
+
+mettreAJourTitre();
 
 // -------
 // MAP
@@ -279,6 +418,8 @@ let structureSelectionnee = null;
 let rechercherStructures = () => [];
 let choisirStructure = () => {};
 let effacerSelectionStructure = () => {};
+let mettreAJourRechercheStructure = () => {};
+let trouverStructureProche = () => {};
 
 function normaliserTexte(texte) {
   return String(texte ?? "")
@@ -286,6 +427,19 @@ function normaliserTexte(texte) {
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .trim();
+}
+
+// Distance en kilomètres entre deux points (formule de haversine)
+function distanceKm(lat1, lon1, lat2, lon2) {
+  const rayonTerre = 6371;
+  const rad = Math.PI / 180;
+  const dLat = (lat2 - lat1) * rad;
+  const dLon = (lon2 - lon1) * rad;
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1 * rad) * Math.cos(lat2 * rad) * Math.sin(dLon / 2) ** 2;
+
+  return 2 * rayonTerre * Math.asin(Math.sqrt(a));
 }
 
 function reinitialiserRecherche() {
@@ -329,6 +483,8 @@ function revenirVueGlobale() {
 
 async function zoomerSurDepartement(select) {
   const id = select.value;
+
+  fermerMenuMobile();
 
   if (!id) {
     revenirVueGlobale();
@@ -375,22 +531,22 @@ function creerRechercheStructure() {
   const input = document.createElement("input");
   input.id = "recherche-structure-input";
   input.type = "search";
-  input.placeholder = "Rechercher une section ou fédé";
+  input.placeholder = LIBELLES_STRUCTURE.section.placeholder;
   input.autocomplete = "off";
   input.spellcheck = false;
   input.setAttribute("role", "combobox");
-  input.setAttribute("aria-label", "Rechercher une section ou une fédération");
+  input.setAttribute("aria-label", LIBELLES_STRUCTURE.section.placeholder);
   input.setAttribute("aria-autocomplete", "list");
   input.setAttribute("aria-haspopup", "listbox");
   input.setAttribute("aria-expanded", "false");
   input.setAttribute("aria-controls", "recherche-structure-liste");
-  input.title = "Rechercher une section ou une fédé";
+  input.title = LIBELLES_STRUCTURE.section.placeholder;
 
   const liste = document.createElement("ul");
   liste.id = "recherche-structure-liste";
   liste.className = "recherche-structure-liste";
   liste.setAttribute("role", "listbox");
-  liste.setAttribute("aria-label", "Sections et fédérations");
+  liste.setAttribute("aria-label", LIBELLES_STRUCTURE.section.liste);
   liste.hidden = true;
 
   let resultats = [];
@@ -404,6 +560,29 @@ function creerRechercheStructure() {
     input.setAttribute("aria-expanded", "false");
     input.removeAttribute("aria-activedescendant");
   };
+
+  // Empêcher la liste de dépasser le bas de l'écran, surtout en paysage
+  const ajusterHauteurListe = () => {
+    if (liste.hidden) {
+      return;
+    }
+
+    const position = liste.getBoundingClientRect().top;
+    const safeAreaBottom =
+      Number.parseFloat(
+        getComputedStyle(document.documentElement).getPropertyValue(
+          "--safe-area-bottom",
+        ),
+      ) || 0;
+    const hauteurDisponible =
+      window.innerHeight - position - 12 - safeAreaBottom;
+    liste.style.maxHeight = `${Math.max(
+      48,
+      Math.min(260, hauteurDisponible),
+    )}px`;
+  };
+
+  window.addEventListener("resize", ajusterHauteurListe);
 
   const activerOption = (index) => {
     const options = liste.querySelectorAll(".recherche-structure-option");
@@ -449,10 +628,11 @@ function creerRechercheStructure() {
     if (!resultats.length) {
       const vide = document.createElement("li");
       vide.className = "recherche-structure-vide";
-      vide.textContent = "Aucune structure trouvée";
+      vide.textContent = LIBELLES_STRUCTURE[typeStructureActif()].vide;
       liste.appendChild(vide);
       liste.hidden = false;
       input.setAttribute("aria-expanded", "true");
+      ajusterHauteurListe();
       return;
     }
 
@@ -478,6 +658,7 @@ function creerRechercheStructure() {
 
     liste.hidden = false;
     input.setAttribute("aria-expanded", "true");
+    ajusterHauteurListe();
   };
 
   input.addEventListener("input", () => {
@@ -539,72 +720,227 @@ function creerRechercheStructure() {
 
   rechercheInputElement = input;
   fermerListeRecherche = fermerListe;
+  mettreAJourRechercheStructure = () => {
+    const libelles = LIBELLES_STRUCTURE[typeStructureActif()];
+
+    input.placeholder = libelles.placeholder;
+    input.title = libelles.placeholder;
+    input.setAttribute("aria-label", libelles.placeholder);
+    liste.setAttribute("aria-label", libelles.liste);
+  };
+  mettreAJourRechercheStructure();
 
   return conteneur;
 }
 
-class FlyToDepartementControl {
-  onAdd() {
-    const container = document.createElement("div");
-    container.className = "maplibregl-ctrl maplibregl-ctrl-group";
-    container.id = "flyto-ctrl";
+// Sélecteur de département (flyto)
+const selecteurDepartement = document.createElement("select");
+selecteurDepartement.id = "flyto-departement";
+selecteurDepartement.setAttribute(
+  "aria-label",
+  "Choisir un département ou revenir à la vue globale",
+);
+selecteurDepartement.title =
+  "Choisir un département ou revenir à la vue globale";
 
-    const select = document.createElement("select");
-    select.id = "flyto-departement";
-    select.setAttribute(
-      "aria-label",
-      "Choisir un département ou revenir à la vue globale",
-    );
-    select.title = "Choisir un département ou revenir à la vue globale";
+const placeholder = document.createElement("option");
+placeholder.value = "";
+placeholder.textContent = "France entière";
+selecteurDepartement.appendChild(placeholder);
 
-    const placeholder = document.createElement("option");
-    placeholder.value = "";
-    placeholder.textContent = "France entière";
-    select.appendChild(placeholder);
+config
+  .filter((d) => d.complete)
+  .forEach((d) => {
+    const option = document.createElement("option");
+    option.value = d.id;
+    option.textContent = `${d.name} (${d.id})`;
+    selecteurDepartement.appendChild(option);
+  });
 
-    config
-      .filter((d) => d.complete)
-      .forEach((d) => {
-        const option = document.createElement("option");
-        option.value = d.id;
-        option.textContent = `${d.name} (${d.id})`;
-        select.appendChild(option);
-      });
+selecteurDepartement.addEventListener("change", () =>
+  zoomerSurDepartement(selecteurDepartement),
+);
 
-    select.addEventListener("change", () => zoomerSurDepartement(select));
+departementSelect = selecteurDepartement;
 
-    departementSelect = select;
-    container.append(select, creerRechercheStructure());
-    this._container = container;
+// Regrouper le flyto et la recherche dans le menu de gauche
+const separateurMenu = document.createElement("div");
+separateurMenu.className = "menu-separateur";
 
-    return container;
-  }
+menu.append(separateurMenu, selecteurDepartement, creerRechercheStructure());
 
-  onRemove() {
-    this._container.remove();
-    departementSelect = null;
-    rechercheInputElement = null;
-    fermerListeRecherche = () => {};
-  }
+// Recherche de la structure la plus proche
+const boutonStructureProche = document.createElement("button");
+boutonStructureProche.type = "button";
+boutonStructureProche.id = "structure-proche";
+boutonStructureProche.className = "menu-bouton";
+boutonStructureProche.innerHTML = `
+  <svg class="menu-bouton-icone" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+    <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z" fill="currentColor"/>
+  </svg>
+  <span class="menu-bouton-texte"></span>
+`;
+boutonStructureProche.title =
+  "Utiliser ma position pour trouver la structure la plus proche";
+
+boutonStructureProche.addEventListener("click", () => trouverStructureProche());
+
+const statutStructureProche = document.createElement("p");
+statutStructureProche.id = "structure-proche-statut";
+statutStructureProche.className = "menu-statut";
+statutStructureProche.setAttribute("role", "status");
+statutStructureProche.setAttribute("aria-live", "polite");
+statutStructureProche.hidden = true;
+
+menu.append(boutonStructureProche, statutStructureProche);
+
+function afficherStatutStructureProche(message, estErreur = false) {
+  statutStructureProche.textContent = message;
+  statutStructureProche.hidden = !message;
+  statutStructureProche.classList.toggle("est-erreur", estErreur);
 }
 
-map.addControl(new FlyToDepartementControl(), "top-right");
+function mettreAJourBoutonStructureProche() {
+  const libelles = LIBELLES_STRUCTURE[typeStructureActif()];
 
-// Attribution
-const attribution = new maplibregl.AttributionControl({
-  compact: true,
-  customAttribution:
-    "<b>Cartographie (non officielle)<br/>des sections et fédérations du PCF</b><hr/><i>Carte réalisée par la section PCF Brie Sénart<br/>avec MapLibre GL et les données du PCF.<br/>Fond de carte : © IGN</i>",
+  boutonStructureProche.querySelector(".menu-bouton-texte").textContent =
+    libelles.proche;
+  boutonStructureProche.setAttribute(
+    "aria-label",
+    `${libelles.proche} (utilise votre position)`,
+  );
+}
+
+mettreAJourBoutonStructureProche();
+
+// Changer de type de structure réinitialise la recherche en cours
+function changerTypeStructure() {
+  reinitialiserRecherche();
+  mettreAJourTitre();
+  mettreAJourRechercheStructure();
+  mettreAJourBoutonStructureProche();
+  afficherStatutStructureProche("");
+  rafraichirMarqueurs();
+}
+
+filterSections.addEventListener("change", changerTypeStructure);
+filterFederations.addEventListener("change", changerTypeStructure);
+
+// -------
+// À PROPOS
+// -------
+
+const boutonAPropos = document.createElement("button");
+boutonAPropos.type = "button";
+boutonAPropos.id = "a-propos-ctrl";
+boutonAPropos.textContent = "i";
+boutonAPropos.title = "À propos de cette carte";
+boutonAPropos.setAttribute("aria-label", "À propos de cette carte");
+boutonAPropos.setAttribute("aria-haspopup", "dialog");
+document.body.append(boutonAPropos);
+
+const panneauAPropos = document.createElement("dialog");
+panneauAPropos.id = "a-propos";
+panneauAPropos.className = "a-propos";
+panneauAPropos.setAttribute("aria-labelledby", "a-propos-titre");
+panneauAPropos.innerHTML = `
+  <header class="a-propos-entete">
+    <h2 id="a-propos-titre">À propos de cette carte</h2>
+    <button
+      type="button"
+      class="a-propos-fermer"
+      aria-label="Fermer le panneau"
+    >×</button>
+  </header>
+
+  <div class="a-propos-corps">
+    <p class="a-propos-intro">
+      Projet non officiel de cartographie des sections et fédérations
+      du Parti communiste français. Ce travail est en cours d'élaborartion et les données sont susceptibles d'évoluer. Les informations publiées
+    </p>
+
+    <section>
+      <h3>Qu’est-ce qu’une section ?</h3>
+      <p>
+        La <strong>section</strong> est la structure de base du Parti communiste
+        français (PCF). Elle rassemble les adhérent·es d’un même territoire ou
+        d’un même lieu de travail. Son périmètre peut correspondre à une ou
+        plusieurs communes, à un ou plusieurs quartiers ou arrondissements, à
+        une zone d’activité ou à une entreprise. Elle organise la vie militante
+        locale, permet aux adhérent·es de se retrouver et de mener collectivement
+        des actions politiques.
+      </p>
+    </section>
+
+    <section>
+      <h3>Qu’est-ce qu’une fédération ?</h3>
+      <p>
+        La <strong>fédération</strong> est la structure du PCF à l’échelle d’un
+        département. Elle regroupe et coordonne les sections de son territoire.
+        Elle anime la vie politique et militante départementale, contribue à la
+        mise en œuvre des orientations du Parti et organise les campagnes et
+        initiatives communes.
+      </p>
+    </section>
+
+    <section>
+      <h3>Méthodologie</h3>
+      <p>
+        Ce projet recense les sections et les fédérations du Parti
+        communiste français (PCF). La cartographie s’appuie sur des données
+        internes au PCF, complétées par des contributions et des informations
+        collectées sur le Web, notamment sur les réseaux sociaux. Sur la carte,
+        chaque épingle représente une section ou une fédération. La localisation
+        des sections est approximative et ne correspond pas nécessairement à une
+        adresse postale réelle. Aucune donnée personnelle n’est publiée. Seules
+        les coordonnées génériques des structures (adresses électroniques et
+        comptes sur les réseaux sociaux) sont renseignées lorsqu’elles sont
+        disponibles.
+      </p>
+    </section>
+
+    <section>
+      <h3>Comment contribuer ?</h3>
+      <p>
+        Pour ajouter une information ou signaler une erreur, vous pouvez utiliser
+        l’un des moyens suivants :
+      </p>
+      <ul class="a-propos-liens">
+        <li>
+          <a href="${URL_FORMULAIRE_CONTRIBUTION}" target="_blank" rel="noopener noreferrer">
+            Utiliser le formulaire de contribution
+          </a>
+        </li>
+        <li>
+          <a href="https://github.com/neocarto/sectionspcf/issues" target="_blank" rel="noopener noreferrer">
+            Ouvrir une issue sur GitHub
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <section class="a-propos-credits">
+      <h3>Crédits</h3>
+      <p>Nicolas Lambert, 2026<br/>
+        Données : PCF & contributions.<br/>
+        Fond de carte : © IGN.</p>
+    </section>
+  </div>
+`;
+document.body.append(panneauAPropos);
+
+boutonAPropos.addEventListener("click", () => {
+  fermerMenuMobile();
+  panneauAPropos.showModal();
 });
 
-map.addControl(attribution, "bottom-right");
+panneauAPropos
+  .querySelector(".a-propos-fermer")
+  .addEventListener("click", () => panneauAPropos.close());
 
-map.once("idle", () => {
-  const control = document.querySelector(".maplibregl-ctrl-attrib");
-
-  if (control) {
-    control.classList.remove("maplibregl-compact-show");
-    control.removeAttribute("open");
+panneauAPropos.addEventListener("click", (event) => {
+  if (event.target === panneauAPropos) {
+    panneauAPropos.close();
   }
 });
 
@@ -634,6 +970,22 @@ map.on("load", async () => {
     // { key: "email", label: "Contact" },
     // { key: "facebook", label: "Facebook" },
   ];
+
+  // E-mail de la fédération par département, pour les infobulles des sections
+  const emailsFederations = new Map();
+
+  lieux.forEach((lieu) => {
+    if (lieu.type?.trim().toLowerCase() !== "fédération") {
+      return;
+    }
+
+    const dep = String(lieu.dep ?? "").trim();
+    const email = String(lieu.email ?? "").trim();
+
+    if (dep && email) {
+      emailsFederations.set(dep, email);
+    }
+  });
 
   lieux.forEach((lieu) => {
     const latitude = Number(lieu.latitude);
@@ -674,6 +1026,10 @@ map.on("load", async () => {
       .filter(({ key }) => lieu[key]?.trim())
       .map(({ key, label }) => `${label} : ${lieu[key]}`);
     const numeroDepartement = String(lieu.dep ?? "").trim();
+    const emailSection = String(lieu.email ?? "").trim();
+    const emailFederation = estSection
+      ? (emailsFederations.get(numeroDepartement) ?? "")
+      : "";
     const urlContribution = creerUrlContribution(lieu);
     const txt_popup = `
   <strong class="popup-nom">${lieu.nom || ""}${
@@ -692,10 +1048,19 @@ map.on("load", async () => {
         : ""
     }
 ${
-  estFederation && lieu.email?.trim()
+  emailSection
     ? `<div class="popup-ligne">
          <img class="popup-icone" src="images/email.png" alt="">
-         <a href="mailto:${lieu.email}">${lieu.email}</a>
+         <a href="mailto:${emailSection}">${emailSection}</a>
+       </div>`
+    : ""
+}
+${
+  emailFederation && emailFederation !== emailSection
+    ? `<div class="popup-ligne">
+         <img class="popup-icone" src="images/email.png" alt="">
+         <a href="mailto:${emailFederation}">${emailFederation}</a>
+         <span class="popup-libelle">(fédé)</span>
        </div>`
     : ""
 }
@@ -800,6 +1165,7 @@ ${
     // Popup au clic
     el.addEventListener("click", (event) => {
       event.stopPropagation();
+      fermerMenuMobile();
 
       if (popupActive) {
         popupActive.remove();
@@ -837,7 +1203,13 @@ ${
       return [];
     }
 
+    // Ne chercher que parmi les structures du type actuellement affiché
+    const chercherFederations = typeStructureActif() === "federation";
+
     return markers
+      .filter((structure) =>
+        chercherFederations ? structure.estFederation : structure.estSection,
+      )
       .map((structure) => {
         const nom = normaliserTexte(structure.nom);
         const position = nom.indexOf(terme);
@@ -864,11 +1236,13 @@ ${
       return;
     }
 
+    fermerMenuMobile();
     structureSelectionnee = structure.marker;
     departementActif = null;
 
     if (departementSelect) {
-      departementSelect.value = "";
+      // La carte zoome sur la structure : aucun département n'est sélectionné
+      departementSelect.selectedIndex = -1;
     }
 
     afficherContourDepartement(null);
@@ -896,6 +1270,83 @@ ${
     rafraichirMarqueurs();
   };
 
+  trouverStructureProche = () => {
+    const chercherFederations = typeStructureActif() === "federation";
+    const structures = markers.filter((structure) =>
+      chercherFederations ? structure.estFederation : structure.estSection,
+    );
+
+    if (!structures.length) {
+      afficherStatutStructureProche("Aucune structure disponible.", true);
+      return;
+    }
+
+    if (!navigator.geolocation) {
+      afficherStatutStructureProche(
+        "La géolocalisation n'est pas disponible dans ce navigateur.",
+        true,
+      );
+      return;
+    }
+
+    boutonStructureProche.disabled = true;
+    afficherStatutStructureProche("Localisation en cours…");
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        boutonStructureProche.disabled = false;
+
+        const { latitude, longitude } = position.coords;
+        let structurePlusProche = null;
+        let distanceMin = Infinity;
+
+        structures.forEach((structure) => {
+          const distance = distanceKm(
+            latitude,
+            longitude,
+            structure.latitude,
+            structure.longitude,
+          );
+
+          if (distance < distanceMin) {
+            distanceMin = distance;
+            structurePlusProche = structure;
+          }
+        });
+
+        if (!structurePlusProche) {
+          afficherStatutStructureProche(
+            "Aucune structure n'a pu être trouvée.",
+            true,
+          );
+          return;
+        }
+
+        if (rechercheInputElement) {
+          rechercheInputElement.value = structurePlusProche.nom;
+        }
+
+        choisirStructure(structurePlusProche);
+        afficherStatutStructureProche("");
+      },
+      (error) => {
+        boutonStructureProche.disabled = false;
+
+        const messages = {
+          1: "Localisation refusée. Autorisez l'accès à votre position dans le navigateur.",
+          2: "Votre position n'a pas pu être déterminée.",
+          3: "La localisation a expiré. Réessayez.",
+        };
+
+        afficherStatutStructureProche(
+          messages[error.code] ?? "La localisation a échoué. Réessayez.",
+          true,
+        );
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 },
+    );
+  };
+
   // -------
   // FILTRES
   // -------
@@ -909,7 +1360,7 @@ ${
       const selectionne = rechercheActive && marker === structureSelectionnee;
 
       const visible =
-        rechercheActive ||
+        selectionne ||
         (estSection && afficherSections) ||
         (estFederation && afficherFederations);
 
@@ -939,7 +1390,7 @@ ${
           const position = marker.getLngLat();
 
           const visible =
-            Boolean(structureSelectionnee) ||
+            marker === structureSelectionnee ||
             (estSection && afficherSections) ||
             (estFederation && afficherFederations);
 
@@ -959,10 +1410,6 @@ ${
   }
 
   rafraichirMarqueurs = filtrerMarqueurs;
-
-  // Réagir aux changements des cases
-  filterSections.addEventListener("change", filtrerMarqueurs);
-  filterFederations.addEventListener("change", filtrerMarqueurs);
 
   // Appliquer les filtres dès le départ
   filtrerMarqueurs();

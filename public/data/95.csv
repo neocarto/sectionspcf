@@ -1,18 +1,18 @@
-"nom","latitude","longitude","email","website"
-"Argenteuil",48.9468885453953,2.24509353646783,"argenteuil@valdoise.pcf.fr",NA
-"Bezons",48.9257350761284,2.21520893012084,"pcfbezons@gmail.com",NA
-"Cergy-Pontoise",49.044520141818,2.05318647463146,"cergy@valdoise.pcf.fr",NA
-"Collectif Jeunes du 95",48.9603741366892,2.2336760810818,"",NA
-"Deuil-Montmagny",48.9740666883003,2.32696045878275,"",NA
-"Écouen-Domont-Ezanville",49.0307385886714,2.32623496225556,"",NA
-"Ermont / Franconville",48.9888552569779,2.25850371293297,"",NA
-"Garges",48.9711828215918,2.40798200410758,"garges@valdoise.pcf.fr",NA
-"Gonesse",48.9858792203256,2.44845147377326,"gonesse@valdoise.pcf.fr",NA
-"Goussainville",49.0303607810344,2.47079526115238,"goussainville@valdoise.pcf.fr",NA
-"Parisis",48.9910988303326,2.16681443303837,"",NA
-"Saint-Gratien",48.9667441550229,2.28412689707996,"",NA
-"Sannois",48.972357772576,2.25685184307054,"",NA
-"Sarcelles",48.9928983314887,2.3794402113459,"pcf.sarcelles@gmail.com",NA
-"Vallée de l’Oise",49.1427239946688,2.29144784974189,"vdo@valdoise.pcf.fr",NA
-"Vallée de l’Ysieux",49.0991519499639,2.50639901596433,"valleedelysieux@valdoise.pcf.fr",NA
-"Villiers-le-Bel",49.0072418351877,2.39895082523819,"",NA
+nom,latitude,longitude,email
+Argenteuil,48.9468885453953,2.24509353646783,argenteuil@valdoise.pcf.fr
+Bezons,48.9257350761284,2.21520893012084,pcfbezons@gmail.com
+Cergy-Pontoise,49.044520141818,2.05318647463146,cergy@valdoise.pcf.fr
+Collectif Jeunes du 95,48.9603741366892,2.2336760810818,
+Deuil-Montmagny,48.9740666883003,2.32696045878275,
+Écouen-Domont-Ezanville,49.0307385886714,2.32623496225556,
+Ermont / Franconville,48.9888552569779,2.25850371293297,
+Garges,48.9711828215918,2.40798200410758,garges@valdoise.pcf.fr
+Gonesse,48.9858792203256,2.44845147377326,gonesse@valdoise.pcf.fr
+Goussainville,49.0303607810344,2.47079526115238,goussainville@valdoise.pcf.fr
+Parisis,48.9910988303326,2.16681443303837,
+Saint-Gratien,48.9667441550229,2.28412689707996,
+Sannois,48.972357772576,2.25685184307054,
+Sarcelles,48.9928983314887,2.3794402113459,pcf.sarcelles@gmail.com
+Vallée de l’Oise,49.1427239946688,2.29144784974189,vdo@valdoise.pcf.fr
+Vallée de l’Ysieux,49.0991519499639,2.50639901596433,valleedelysieux@valdoise.pcf.fr
+Villiers-le-Bel,49.0072418351877,2.39895082523819,

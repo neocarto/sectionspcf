@@ -768,7 +768,8 @@ INFOBULLES MAPLIBRE
 ----------------- */
 
 .maplibregl-popup {
-  z-index: 10;
+  /* L'infobulle doit rester au-dessus du menu et du titre */
+  z-index: 1100;
   max-width: 320px !important;
   font-family: inherit;
 }
